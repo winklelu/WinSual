@@ -1,0 +1,81 @@
+---
+title: "Winkle Lu"
+about:
+  id: hero-heading
+  template: solana
+  image: winkle.jpg
+  links:
+    - icon: LinkedIn
+      text: LinkedIn
+      href: https://www.linkedin.com/in/winkle-lu-programming-tw/
+    - icon: github
+      text: Github
+      href: https://github.com/winklelu
+    - text: winklelu1226@gmail.com 
+    
+---
+
+### Statistical Programming | SAS, R, Python, Shiny, Quarto | Data Visualization & Automation Tool | Developer | Clinical Trial | CDISC
+
+
+:::{#hero-heading}
+
+With over a decade of experience in clinical trial programming, I specialize in CDISC standards and regulatory deliverable — but I’m not standing still. I’ve embraced open-source tools like R, Shiny, and Python to drive automation and improve data visualization.
+
+📘 [Blog/Sharing](blog/)  |  👉 [Presentations](Speaker.qmd)
+
+
+## Experience
+
+Clinical Research Organization | Pharmaceutical Company | 
+Statistical Programming
+
+## Education
+
+Master of Public Health | Tzu Chi University
+
+## Performance Summary
+- 11+ years of clinical trial programming experience with deep expertise in SDTM, ADaM, and regulatory submission.
+
+- Led an 18-member team to complete COVID-19 Phase III programming within 3 months; results published in NEJM.
+
+- Skilled at cross-functional collaboration, providing medical-monitor support and creating publication-ready output.
+
+- Developed automation tools including an aCRF mapping system and review validation tools, boosting efficiency by 70%. 
+
+- Presented at R/Pharma 2024 and ShinyConf 2025, demonstrating advanced R Shiny proficiency.
+
+- Recognized for consistently delivering high-quality work with exceptional efficiency, I have earned promotions at nearly every company I have worked for.
+
+## Therapeutic Area
+
+- Allergy / Immunology: Allergic Rhinitis
+
+- Cardiovascular: Cardiovascular Disease
+
+- COVID-19
+
+- Dermatology: Actinic keratosis, Angiosarcoma of Skin (disorder), Preventing Hypertrophic Scar, Psoriasis
+
+- Endocrinology: Diabetes Mellitus Type 2
+
+- Nephrology: Renal Impairment
+
+- Oncology: Multiple myeloma, Non-Small Cell Lung Cancer, Small Cell Carcinoma of Lung, Hepatocellular Carcinoma, Gastrointestinal Cancer, Malignant Melanoma, Malignant Neoplastic Disease
+
+- Transplantation: Rheumatoid Arthritis
+
+## Publications
+
+- Winkle Lu, Reviewing Clinical Data Efficiently with Shiny, ShinyConf 2025.
+
+- Winkle Lu, Presenting Clinical Results via CDISC-Compliant Shiny Apps, R/Pharma 2024.
+
+- Zhi-Sheng Lu, 2018, Combining quality of productivity and efficiency under highly pressure of lacking time – discussion by view of first-time quality, PharmaSUG – Beijing.
+
+- Shu-Hui Wen, Zhi-Sheng Lu, 2011, Factors affecting the effective number of tests in genetic association studies: A comparative study of three PCA-based methods, Journal of Human Genetics, 56, 428–435 [SCI].
+
+
+
+:::
+

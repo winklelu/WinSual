@@ -1,0 +1,14 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "WinSual"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: Speaker.qmd
+        text: Presentations
+      - href: blog/index.qmd
+        text: Blog

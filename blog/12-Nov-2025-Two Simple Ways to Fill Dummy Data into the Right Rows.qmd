@@ -1,0 +1,147 @@
+---
+title: "Two Simple Ways to Fill Dummy Data into the Right Rows"
+date: "12-Nov-2025"
+categories: [R, Tidyverse]
+description: "Two Simple Ways to Fill Dummy Data into the Right Rows."
+format: html
+---
+
+<img src="../images/dummy.jpg" width="600px" style="margin-bottom: 1em; border-radius: 8px;">
+
+
+---
+
+## Introduction  
+
+When preparing statistical summaries, we often need to create dummy data to maintain consistent structures.For example, ensuring all combinations of categorical variables appear in a summary table. This post introduces two simple approaches to fill dummy rows into your dataset using R and the tidyverse.
+
+---
+
+
+## Example Dataset
+
+Let’s start by creating a sample dataset:
+
+```{r}
+library(tidyverse)
+
+set.seed(2025)
+
+temp1 <- tibble(
+  treatment = sample(c("g1", "g2"), size = 10, replace = TRUE),
+  sub       = sample(c("x1", "x2", "x3"), size = 10, replace = TRUE),
+  id        = 1:10
+)
+
+temp1
+
+```
+
+This dataset contains three variables:
+
+- treatment with values "g1" and "g2",
+
+- sub with values "x1", "x2", and "x3",
+
+- id as a sequential index.
+
+👉 *Now imagine we need to count records by treatment and sub, but we also want to include a new category — y1 — under sub, even if it doesn’t appear in the data.
+How can we achieve that?*
+
+
+## Method 1 — Using crossing()
+
+This approach manually builds a dummy dataset and merges it with the existing summary.
+
+Steps:
+
+1️⃣ Obtain unique treatment values.
+
+2️⃣ Create all desired combinations using crossing().
+
+3️⃣ Combine the dummy and original counts. 
+  
+```{r}
+  
+# Count the original combinations
+
+temp2 <- temp1 %>%
+count(treatment, sub, name = "count")
+
+# Extract unique treatments
+
+temp2_nodup <- temp2 %>%
+  arrange(treatment, sub, count) %>%
+  group_by(treatment) %>%
+  mutate(id = row_number()) %>%
+  filter(row_number() == 1) %>%
+  select(treatment) %>%
+  ungroup()
+
+
+# Create dummy data with all sub categories, including y1
+
+dummy <- crossing(
+  temp2_nodup,
+  sub = c("x1", "x2", "x3", "y1"),
+  count = 0
+)
+
+# Combine and keep the latest record per combination
+
+temp3 <- temp2 %>%
+  rbind(dummy) %>%
+  arrange(treatment, sub, count) %>%
+  group_by(treatment, sub) %>%
+  mutate(id1 = row_number(), id2 = n()) %>%
+  filter(row_number() == n()) %>%
+  select(-matches("^id")) %>%
+  ungroup()
+
+temp3
+
+```
+
+
+## Method 2 — Using complete()
+
+A cleaner and more concise way uses tidyr::complete(), which automatically fills missing combinations.
+
+Steps:
+
+1️⃣ Count existing records by group.
+
+2️⃣ Use complete() to add the missing combinations.
+
+
+---
+
+```{r}
+way2 <- temp1 %>%
+  count(treatment, sub, name = "count") %>%
+  complete(
+    treatment,
+    sub = c("x1", "x2", "x3", "y1"),
+    fill = list(count = 0)
+    )
+
+way2 
+
+```
+  
+## 🎨Conclusion
+
+This is a common requirement in data processing — ensuring all expected categories appear in your summaries or reports.
+Both crossing() and complete() from the tidyverse provide efficient ways to generate dummy data and maintain structural integrity.
+
+
+- Use crossing() when you need full control over combinations and want to manually build the structure.
+
+- Use complete() for a more concise, declarative approach that integrates naturally into tidy pipelines.
+
+
+In short, crossing() gives you full control to build combinations manually, while complete() offers a cleaner, automatic way to fill missing categories in your data.
+
+
+
+---  

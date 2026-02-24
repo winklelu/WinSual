@@ -1,0 +1,17 @@
+[
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/12-Nov-2025-Two Simple Ways to Fill Dummy Data into the Right Rows.html",
+      "/blog/15-OCT-2025-A Journey into Data Visualization - From ggplot2 Techniques to Visual Design.html",
+      "/blog/13-Sep-2025-Exploring cols4all for Better Data Visualization.html",
+      "/blog/01-AUG-2025-Takeaways from Learning Programming and AI Tools.html",
+      "/blog/06-JUL-2025-Statistical Programmer.html",
+      "/blog/04-MAY-2025-Plot-Table Highlighting in Shiny.html",
+      "/blog/05-APR-2025-Collaborating with ChatGPT.html",
+      "/blog/01-FEB-2025-Lets Code the Zodiac in R.html",
+      "/blog/02-JAN-2025-Generate Dynamic Text Results with glue.html",
+      "/blog/23-JUN-2024-lapply_gsub.html"
+    ]
+  }
+]
