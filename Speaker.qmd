@@ -36,7 +36,7 @@ This presentation explores how R and Shiny can enhance the review and visualizat
 
 [![](slides/thumb_pharmasug2018.png){width=300px}](slides/Pharmasug2018_first-time_quality.pdf)
 
-**Title:** Using Shiny to Clearly Present Clinical Results with CDISC-Compliant Dataset  
+**Title:** Combining Quality of Productivity and Efficiency Under Highly Pressure of Lacking Time – Discussion by View of First-Time Quality 
 📍 *Date:* 2018-08-31  
 📝 *Summary:*  
 This paper discusses how to enhance programming quality and efficiency in clinical trials under tight deadlines, especially within CROs. It emphasizes the importance of “first-time quality,” defined as the quality of deliverables before QC review. The author argues that poor initial quality leads to higher correction costs and delays, despite common practices like SOPs, validated macros, and training. A structured QC plan is essential but resource-intensive. The paper highlights factors affecting quality, including unfamiliarity with study design, insufficient task understanding, and client complexity. To address this, the author proposes a "First-Time Quality Scale" that evaluates programmers based on QC comments, client feedback, and satisfaction. High-scoring individuals can be assigned to time-sensitive projects, maximizing both quality and speed. The paper concludes that focusing on first-time quality can reduce repetitive work, save resources, and improve overall outcomes, aligning with the increasing demand for rapid and accurate clinical data processing.
