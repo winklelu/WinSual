@@ -1,0 +1,55 @@
+---
+title: "New MacBook, New Setup — Rebuilding My Dev Environment and Relaunching My Website"
+date: 2026-02-25
+categories: [Git, Quarto, GitHub, Setup]
+description: "What I learned from setting up a new MacBook — including the traps I fell into along the way."
+format: html
+---
+
+![](../images/git-workflow.svg){style="border-radius: 10px;" width="600"}
+
+My old laptop had a strange problem. Even after a professional repair, it kept shutting down by itself. For someone who works with data every day, this was too risky to ignore. So I decided to get a new computer.
+
+This was also a good chance to rename my personal website from Winkode to **WinSual**, and rebuild my development environment from scratch.
+
+---
+
+## What I Did Tonight
+
+When I moved my files to the new MacBook, the files came over — but the tools did not. Here is what I had to check:
+
+- **Git**: Already built into macOS. Just run `git --version` to confirm.
+- **R, Python, and project folders**: Moved over fine and worked without problems.
+- **Quarto**: Not included in the move. I downloaded it from the official website and installed it in about five minutes.
+
+---
+
+## Things That Went Wrong
+
+The most surprising problem was a folder name. My R folder was saved with a **full-width "Ｒ"** — a character from the Chinese input method — instead of a normal English "R". Terminal could not find the path at all. It took a while to figure out why. Renaming the folder to a regular English letter fixed it right away.
+
+Another thing: R packages do not move to a new computer automatically. When I ran `quarto render`, it showed an error saying `tidyverse` was missing. After installing it, everything worked. If other blog posts use different packages, I will need to install those too.
+
+For GitHub login, passwords are no longer supported. You must use a **Personal Access Token (PAT)** instead. Once you set it up, Mac's osxkeychain saves it for you, so you do not need to enter it every time you push.
+
+---
+
+## Don't Forget to Sync GitHub on a New Machine
+
+This is easy to forget. On a new computer, your local Git history is empty. You need to connect it to GitHub again:
+
+1. `git init` — set up a new local repo
+2. `git remote add origin` — link it to your GitHub repo
+3. First `git push` needs `--force` — because your local repo has no history yet, GitHub will block a normal push
+
+After that, everything is back to normal. Just use `git add`, `git commit`, and `git push` each time you make changes. See the diagram below:
+
+![Git Workflow Diagram](../images/git-workflow.svg){style="border-radius: 10px;" width="600"}
+
+---
+
+## Final Thoughts
+
+WinSual is now live 👉 <https://winklelu.github.io/WinSual/>
+
+The direction is clear — turning complex data into something people can actually understand. That is what I will keep doing.

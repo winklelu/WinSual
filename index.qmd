@@ -7,15 +7,15 @@ about:
   links:
     - icon: LinkedIn
       text: LinkedIn
-      href: https://www.linkedin.com/in/winkle-lu-programming-tw/
+      href: https://www.linkedin.com/in/winsual/
     - icon: github
       text: Github
       href: https://github.com/winklelu
-    - text: winklelu1226@gmail.com 
+    - text: winsual0512@gmail.com 
     
 ---
 
-### Statistical Programming | SAS, R, Python, Shiny, Quarto | Data Visualization & Automation Tool | Developer | Clinical Trial | CDISC
+### Clinical & Regulated Data Visualization | Shiny App Developer for Pharma, Biotech & Beyond | SAS, R, Python, Shiny, Quarto | Automation Tool
 
 
 :::{#hero-heading}

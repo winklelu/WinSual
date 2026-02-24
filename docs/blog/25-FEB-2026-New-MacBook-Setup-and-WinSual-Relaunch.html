@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-02-25">
+<meta name="description" content="What I learned from setting up a new MacBook — including the traps I fell into along the way.">
 
-<title>Blog – WinSual</title>
+<title>New MacBook, New Setup — Rebuilding My Dev Environment and Relaunching My Website – WinSual</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +32,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -70,69 +70,11 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-date','listing-categories','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -158,7 +100,7 @@ window.Quarto = {
 <span class="menu-text">Presentations</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" aria-current="page"> 
+    <a class="nav-link" href="../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
 </ul>
@@ -172,22 +114,37 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(11)</span></div><div class="category" data-category="QUk=">AI <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Q2FyZWVy">Career <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q2hhdEdQVA==">ChatGPT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q29sb3Jz">Colors <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGF0YSUyMFZpc3VhbGl6YXRpb24=">Data Visualization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RFQ=">DT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dwbG90Mg==">ggplot2 <span class="quarto-category-count">(2)</span></div><div class="category" data-category="R2l0">Git <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R2l0SHVi">GitHub <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2x1ZQ==">glue <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z3N1Yg==">gsub <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aGFzaA==">hash <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bGFwcGx5">lapply <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TGVhcm5pbmc=">Learning <span class="quarto-category-count">(2)</span></div><div class="category" data-category="cGxvdGx5">plotly <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHJvZ3JhbW1pbmc=">Programming <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Ug==">R <span class="quarto-category-count">(7)</span></div><div class="category" data-category="U2V0dXA=">Setup <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2hpbnk=">Shiny <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U3RhdGlzdGljYWwlMjBQcm9ncmFtbWVy">Statistical Programmer <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGlkeXZlcnNl">Tidyverse <span class="quarto-category-count">(2)</span></div><div class="category" data-category="VmlzdWFsaXphdGlvbg==">Visualization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Wm9kaWFj">Zodiac <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Blog</h1>
-</div>
+<h1 class="title">New MacBook, New Setup — Rebuilding My Dev Environment and Relaunching My Website</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Git</div>
+    <div class="quarto-category">Quarto</div>
+    <div class="quarto-category">GitHub</div>
+    <div class="quarto-category">Setup</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    What I learned from setting up a new MacBook — including the traps I fell into along the way.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 25, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -197,300 +154,53 @@ window.Quarto = {
 </header>
 
 
+<p><img src="../images/git-workflow.svg" class="img-fluid" style="border-radius: 10px;" width="600"></p>
+<p>My old laptop had a strange problem. Even after a professional repair, it kept shutting down by itself. For someone who works with data every day, this was too risky to ignore. So I decided to get a new computer.</p>
+<p>This was also a good chance to rename my personal website from Winkode to <strong>WinSual</strong>, and rebuild my development environment from scratch.</p>
+<hr>
+<section id="what-i-did-tonight" class="level2">
+<h2 class="anchored" data-anchor-id="what-i-did-tonight">What I Did Tonight</h2>
+<p>When I moved my files to the new MacBook, the files came over — but the tools did not. Here is what I had to check:</p>
+<ul>
+<li><strong>Git</strong>: Already built into macOS. Just run <code>git --version</code> to confirm.</li>
+<li><strong>R, Python, and project folders</strong>: Moved over fine and worked without problems.</li>
+<li><strong>Quarto</strong>: Not included in the move. I downloaded it from the official website and installed it in about five minutes.</li>
+</ul>
+<hr>
+</section>
+<section id="things-that-went-wrong" class="level2">
+<h2 class="anchored" data-anchor-id="things-that-went-wrong">Things That Went Wrong</h2>
+<p>The most surprising problem was a folder name. My R folder was saved with a <strong>full-width “Ｒ”</strong> — a character from the Chinese input method — instead of a normal English “R”. Terminal could not find the path at all. It took a while to figure out why. Renaming the folder to a regular English letter fixed it right away.</p>
+<p>Another thing: R packages do not move to a new computer automatically. When I ran <code>quarto render</code>, it showed an error saying <code>tidyverse</code> was missing. After installing it, everything worked. If other blog posts use different packages, I will need to install those too.</p>
+<p>For GitHub login, passwords are no longer supported. You must use a <strong>Personal Access Token (PAT)</strong> instead. Once you set it up, Mac’s osxkeychain saves it for you, so you do not need to enter it every time you push.</p>
+<hr>
+</section>
+<section id="dont-forget-to-sync-github-on-a-new-machine" class="level2">
+<h2 class="anchored" data-anchor-id="dont-forget-to-sync-github-on-a-new-machine">Don’t Forget to Sync GitHub on a New Machine</h2>
+<p>This is easy to forget. On a new computer, your local Git history is empty. You need to connect it to GitHub again:</p>
+<ol type="1">
+<li><code>git init</code> — set up a new local repo</li>
+<li><code>git remote add origin</code> — link it to your GitHub repo</li>
+<li>First <code>git push</code> needs <code>--force</code> — because your local repo has no history yet, GitHub will block a normal push</li>
+</ol>
+<p>After that, everything is back to normal. Just use <code>git add</code>, <code>git commit</code>, and <code>git push</code> each time you make changes. See the diagram below:</p>
+<div class="quarto-figure quarto-figure-center" style="border-radius: 10px;">
+<figure class="figure">
+<p><img src="../images/git-workflow.svg" class="img-fluid figure-img" width="600"></p>
+<figcaption>Git Workflow Diagram</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="final-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="final-thoughts">Final Thoughts</h2>
+<p>WinSual is now live 👉 <a href="https://winklelu.github.io/WinSual/" class="uri">https://winklelu.github.io/WinSual/</a></p>
+<p>The direction is clear — turning complex data into something people can actually understand. That is what I will keep doing.</p>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="R2l0JTJDUXVhcnRvJTJDR2l0SHViJTJDU2V0dXA=" data-listing-date-sort="1771948800000" data-listing-file-modified-sort="1771955209210" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="402">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/25-FEB-2026-New-MacBook-Setup-and-WinSual-Relaunch.html" class="no-external">New MacBook, New Setup — Rebuilding My Dev Environment and Relaunching My Website</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('R2l0'); return false;">Git</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UXVhcnRv'); return false;">Quarto</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('R2l0SHVi'); return false;">GitHub</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('U2V0dXA='); return false;">Setup</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/25-FEB-2026-New-MacBook-Setup-and-WinSual-Relaunch.html" class="no-external">
-<p>What I learned from setting up a new MacBook — including the traps I fell into along the way.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/25-FEB-2026-New-MacBook-Setup-and-WinSual-Relaunch.html" class="no-external">
-<div class="listing-date">
-Feb 25, 2026
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="UiUyQ1RpZHl2ZXJzZQ==" data-listing-date-sort="1762876800000" data-listing-file-modified-sort="1762963500000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="465">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/12-Nov-2025-Two Simple Ways to Fill Dummy Data into the Right Rows.html" class="no-external">Two Simple Ways to Fill Dummy Data into the Right Rows</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGlkeXZlcnNl'); return false;">Tidyverse</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/12-Nov-2025-Two Simple Ways to Fill Dummy Data into the Right Rows.html" class="no-external">
-<p>Two Simple Ways to Fill Dummy Data into the Right Rows.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/12-Nov-2025-Two Simple Ways to Fill Dummy Data into the Right Rows.html" class="no-external">
-<div class="listing-date">
-Nov 12, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="UiUyQ2dncGxvdDIlMkNWaXN1YWxpemF0aW9uJTJDTGVhcm5pbmc=" data-listing-date-sort="1760457600000" data-listing-file-modified-sort="1760551084000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="611">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/15-OCT-2025-A Journey into Data Visualization - From ggplot2 Techniques to Visual Design.html" class="no-external">A Journey into Data Visualization: From ggplot2 Techniques to Visual Design</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2dwbG90Mg=='); return false;">ggplot2</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VmlzdWFsaXphdGlvbg=='); return false;">Visualization</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TGVhcm5pbmc='); return false;">Learning</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/15-OCT-2025-A Journey into Data Visualization - From ggplot2 Techniques to Visual Design.html" class="no-external">
-🎯 <strong>ggplot2 &amp; Data Visualization Design</strong>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/15-OCT-2025-A Journey into Data Visualization - From ggplot2 Techniques to Visual Design.html" class="no-external">
-<div class="listing-date">
-Oct 15, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="UiUyQ2dncGxvdDIlMkNEYXRhJTIwVmlzdWFsaXphdGlvbiUyQ0NvbG9ycw==" data-listing-date-sort="1757692800000" data-listing-file-modified-sort="1758970534000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="353">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/13-Sep-2025-Exploring cols4all for Better Data Visualization.html" class="no-external">Colors Matter: Exploring <code>cols4all</code> for Better Data Visualization</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2dwbG90Mg=='); return false;">ggplot2</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGF0YSUyMFZpc3VhbGl6YXRpb24='); return false;">Data Visualization</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Q29sb3Jz'); return false;">Colors</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/13-Sep-2025-Exploring cols4all for Better Data Visualization.html" class="no-external">
-<p>How the R package cols4all helps you balance aesthetics and accessibility in choosing color palettes.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/13-Sep-2025-Exploring cols4all for Better Data Visualization.html" class="no-external">
-<div class="listing-date">
-Sep 13, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="UHJvZ3JhbW1pbmclMkNBSSUyQ0xlYXJuaW5n" data-listing-date-sort="1753804800000" data-listing-file-modified-sort="1771954751146" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="982">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/01-AUG-2025-Takeaways from Learning Programming and AI Tools.html" class="no-external">Takeaways from Learning Programming and AI Tools - Part 1</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHJvZ3JhbW1pbmc='); return false;">Programming</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QUk='); return false;">AI</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TGVhcm5pbmc='); return false;">Learning</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/01-AUG-2025-Takeaways from Learning Programming and AI Tools.html" class="no-external">
-<p>Introduction</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/01-AUG-2025-Takeaways from Learning Programming and AI Tools.html" class="no-external">
-<div class="listing-date">
-Jul 30, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="U3RhdGlzdGljYWwlMjBQcm9ncmFtbWVyJTJDQ2FyZWVy" data-listing-date-sort="1751731200000" data-listing-file-modified-sort="1753890692000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="892">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/06-JUL-2025-Statistical Programmer.html" class="no-external">Lesser-known but crucial role - Statistical Programmer</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('U3RhdGlzdGljYWwlMjBQcm9ncmFtbWVy'); return false;">Statistical Programmer</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Q2FyZWVy'); return false;">Career</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/06-JUL-2025-Statistical Programmer.html" class="no-external">
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/06-JUL-2025-Statistical Programmer.html" class="no-external">
-<div class="listing-date">
-Jul 6, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="UiUyQ0RUJTJDU2hpbnklMkNwbG90bHk=" data-listing-date-sort="1746288000000" data-listing-file-modified-sort="1751736820000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="468">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/04-MAY-2025-Plot-Table Highlighting in Shiny.html" class="no-external">Plot-Table Highlighting in Shiny</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RFQ='); return false;">DT</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('U2hpbnk='); return false;">Shiny</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cGxvdGx5'); return false;">plotly</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/04-MAY-2025-Plot-Table Highlighting in Shiny.html" class="no-external">
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/04-MAY-2025-Plot-Table Highlighting in Shiny.html" class="no-external">
-<div class="listing-date">
-May 4, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="QUklMkNDaGF0R1BUJTJDUHJvZ3JhbW1pbmc=" data-listing-date-sort="1743782400000" data-listing-file-modified-sort="1751648930000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="388">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/05-APR-2025-Collaborating with ChatGPT.html" class="no-external">Collaborating with ChatGPT in Coding</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('QUk='); return false;">AI</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Q2hhdEdQVA=='); return false;">ChatGPT</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHJvZ3JhbW1pbmc='); return false;">Programming</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/05-APR-2025-Collaborating with ChatGPT.html" class="no-external">
-<p>What I’ve Learned So Far</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/05-APR-2025-Collaborating with ChatGPT.html" class="no-external">
-<div class="listing-date">
-Apr 5, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="UiUyQ2hhc2glMkNab2RpYWM=" data-listing-date-sort="1738339200000" data-listing-file-modified-sort="1751738550000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="446">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/01-FEB-2025-Lets Code the Zodiac in R.html" class="no-external">🧧 Happy Lunar New Year! Let’s Code the Zodiac in R 🐍</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('aGFzaA=='); return false;">hash</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Wm9kaWFj'); return false;">Zodiac</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/01-FEB-2025-Lets Code the Zodiac in R.html" class="no-external">
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/01-FEB-2025-Lets Code the Zodiac in R.html" class="no-external">
-<div class="listing-date">
-Feb 1, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="9" data-categories="UiUyQ1RpZHl2ZXJzZSUyQ2dsdWU=" data-listing-date-sort="1735747200000" data-listing-file-modified-sort="1751742202000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="324">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/02-JAN-2025-Generate Dynamic Text Results with glue.html" class="no-external">Generate Dynamic Text Results with glue and lapply in R</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGlkeXZlcnNl'); return false;">Tidyverse</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2x1ZQ=='); return false;">glue</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/02-JAN-2025-Generate Dynamic Text Results with glue.html" class="no-external">
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/02-JAN-2025-Generate Dynamic Text Results with glue.html" class="no-external">
-<div class="listing-date">
-Jan 2, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="10" data-categories="UiUyQ2xhcHBseSUyQ2dzdWI=" data-listing-date-sort="1719072000000" data-listing-file-modified-sort="1751740958000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="399">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/23-JUN-2024-lapply_gsub.html" class="no-external">Efficiently Apply the Same Function to Multiple Datasets in R</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bGFwcGx5'); return false;">lapply</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z3N1Yg=='); return false;">gsub</div>
-
-</div>
-<div class="delink listing-description"><a href="../blog/23-JUN-2024-lapply_gsub.html" class="no-external">
-</a></div>
-</div>
-<div class="metadata">
-<a href="../blog/23-JUN-2024-lapply_gsub.html" class="no-external">
-<div class="listing-date">
-Jun 23, 2024
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
