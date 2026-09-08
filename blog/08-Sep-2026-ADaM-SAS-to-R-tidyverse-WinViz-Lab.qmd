@@ -1,0 +1,61 @@
+---
+title: "From SAS to tidyverse: Sharing ADaM Code Scenarios in WinViz Lab"
+date: 2026-09-08
+categories: [R, SAS, ADaM, CDISC, Clinical Trials, tidyverse, Open Source, "Automation & Reproducible Workflows", "Clinical Programming & Regulatory Delivery"]
+description: "A reference set of common ADaM code scenarios, written in tidyverse and matched line-by-line against the original SAS logic — plus why I built the WinViz Lab sharing space around it."
+format: html
+---
+
+I put together a set of common code scenarios used during the ADaM stage in clinical trials. It started as a personal exercise — I wanted to see how far I could push tidyverse to replicate logic I'd normally reach for `PROC SQL` or a `DATA` step to solve. It grew into something I think is worth sharing: a reference for anyone who needs to match SAS logic and translate it into R, or who is simply curious what an ADaM derivation looks like from the other side of the fence.
+
+Right now I'm using oncology studies as the typical background, since tumor response and time-to-event derivations tend to surface the widest range of logic — flags, windows, censoring, grouping — in a compact set of examples. I've organized everything into 7 common categories, and all of the R code is written using tidyverse.
+
+➡️ [github.com/winklelu/adam-in-r](https://github.com/winklelu/adam-in-r) · browse it inside [WinViz Lab](https://winklelu.github.io/WinSual/winviz.html)
+
+---
+
+## The 7 Categories
+
+| # | Category | What it covers |
+|---|----------|-----------------|
+| 01 | **Data Restructuring** | Sorting, merging, long/wide reshaping, expanding multi-select fields, linking cross-domain records |
+| 02 | **Variable Attributes** | Centralizing variable labels and controlling output column order for consistent, submission-ready datasets |
+| 03 | **Date & Time** | ISO 8601 conversion, partial dates, relative study day, datetime differences for PK timing |
+| 04 | **Core ADaM Derivations** | Treatment-emergent flags, baseline/change from baseline, PARAM/PARAMCD, toxicity grading, population flags |
+| 05 | **String & Numeric Handling** | String split/concatenate, numeric ↔ character conversion, coalescing multiple sources, regex extraction |
+| 06 | **QC & Output** | Structural validation checks and exporting deliverables across multiple datasets in one call |
+| 07 | **Oncology & TTE** | RECIST lesion classification, best overall response, PFS/OS time-to-event with censoring |
+
+Each category maps to a folder in the repo (`01_data_restructure`, `02_variable_attrib`, and so on), and each folder holds one or more standalone R files.
+
+---
+
+## 🔔 How to Use It
+
+**1️⃣ Start at WinViz Lab.** Go to the [WinViz Lab](https://winklelu.github.io/WinSual/winviz.html) link above and scroll down to the **"Dataset"** section — that's where all 7 categories are listed as cards, each with a short description and a direct link to its code on GitHub.
+
+**2️⃣ Each example file runs on its own.** Every script begins with:
+
+```r
+source(here::here("R", "00_data", "simulate_data.R"))
+```
+
+This loads simulated data — fake cases generated to follow the CDISC SDTM structure, **not real patient data** — so you can run any file in isolation without needing an actual study dataset.
+
+**3️⃣ Read it side by side, then run it.** Inside each file, you'll see the full **"Original SAS logic"** commented out above its **tidyverse equivalent**, so you can compare the two approaches line by line before running anything. You can execute a whole file directly with:
+
+```r
+Rscript R/<category>/<filename>.R
+```
+
+or step through it section by section in RStudio or Positron — useful if you want to inspect intermediate objects as the logic unfolds.
+
+---
+
+## Why WinViz Lab Exists
+
+I built the **WinViz Lab** section of this site as a shared space for the things I make along the way — visualizations, templates, and now these SAS-to-R code scenarios. The idea is simple: whatever I build for my own learning or work, if it can also be useful to someone else, I'd rather put it out where it can be found than let it sit in a private folder.
+
+That's really the spirit behind it — *"the contributions I long to make."* Clinical programming has a steep, often quiet learning curve, and a lot of what makes it easier to cross — matching SAS habits to R idioms, seeing a derivation solved two different ways — isn't always written down anywhere accessible. If sharing this saves someone else a few hours of guessing, that's the whole point.
+
+WinViz Lab isn't a finished product — it's meant to keep growing. New tools, new visualizations, and new code scenarios will be added over time, and existing ones will get revised as I learn better ways to do things. If you're working through SAS-to-R translation yourself, or just want to see how an ADaM derivation looks in tidyverse, I hope this is useful — and there will be more to come.
