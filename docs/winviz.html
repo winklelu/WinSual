@@ -264,6 +264,28 @@
     border: 1px solid rgba(59,130,246,0.25);
     text-transform: none;
   }
+  .tag-sdtm {
+    top: 1rem; left: auto; right: 1rem;
+    background: rgba(245,158,11,0.15);
+    color: var(--accent3);
+    border: 1px solid rgba(245,158,11,0.25);
+    text-transform: none;
+  }
+  .dataset-subhead {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.5rem 0 -0.25rem;
+  }
+  .dataset-subhead span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .dataset-subhead::after { content: ''; flex: 1; height: 1px; background: var(--border); }
   .coming-soon-overlay {
     position: absolute;
     inset: 0;
@@ -478,7 +500,7 @@
   </p>
   <div class="hero-stats">
     <div class="stat">
-      <span class="stat-num">13</span>
+      <span class="stat-num">21</span>
       <span class="stat-label">Tools</span>
     </div>
     <div class="stat">
@@ -715,6 +737,8 @@
     <div class="viz-grid">
 
   <!-- adam-in-r series — Dataset -->
+  <div class="dataset-subhead"><span style="color:var(--accent2);">ADaM Series · adam-in-r</span></div>
+
   <div class="viz-card available" data-category="dataset">
     <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
       <span class="card-tag tag-adam">ADaM</span>
@@ -907,6 +931,240 @@
         <div class="card-actions">
           <a class="btn-code"
              href="https://github.com/winklelu/adam-in-r/tree/main/R/07_oncology_tte"
+             target="_blank">⌥ Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sdtm-in-r series — Dataset -->
+  <div class="dataset-subhead"><span style="color:var(--accent3);">SDTM Series · sdtm-in-r</span></div>
+
+  <div class="viz-card available" data-category="dataset">
+    <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
+      <span class="card-tag tag-sdtm">SDTM</span>
+      <div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--accent3);opacity:0.85;">101</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent3);letter-spacing:0.05em;opacity:0.9;">SAS &gt;&gt; R</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;">Raw/EDC Domain Build</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Raw/EDC Reading &amp; Domain Split/Assembly</h3>
+      <p class="card-desc">
+        Turning raw/EDC data into standardized SDTM domains — splitting one
+        source into two domains, assembling one domain from several raw
+        sources, batch-copying, and integrating external vendor data.
+      </p>
+      <div class="card-footer">
+        <div class="card-tech">
+          <span class="tech-pill">pivot_longer()</span>
+          <span class="tech-pill">bind_rows()</span>
+          <span class="tech-pill">left_join()</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-code"
+             href="https://github.com/winklelu/sdtm-in-r/tree/main/R/01_raw_domain_build"
+             target="_blank">⌥ Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-card available" data-category="dataset">
+    <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
+      <span class="card-tag tag-sdtm">SDTM</span>
+      <div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--accent3);opacity:0.85;">102</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent3);letter-spacing:0.05em;opacity:0.9;">SAS &gt;&gt; R</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;">Trial Design</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Trial Design Domains</h3>
+      <p class="card-desc">
+        Importing hand-maintained Trial Design domains (TA, TE, TI, TV, TS)
+        from a specification workbook — one sheet per domain, with no
+        raw/EDC source involved at all.
+      </p>
+      <div class="card-footer">
+        <div class="card-tech">
+          <span class="tech-pill">purrr::map()</span>
+          <span class="tech-pill">read_excel()</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-code"
+             href="https://github.com/winklelu/sdtm-in-r/tree/main/R/02_trial_design"
+             target="_blank">⌥ Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-card available" data-category="dataset">
+    <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
+      <span class="card-tag tag-sdtm">SDTM</span>
+      <div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--accent3);opacity:0.85;">103</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent3);letter-spacing:0.05em;opacity:0.9;">SAS &gt;&gt; R</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;">Date, Time &amp; Epoch</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Date, Time &amp; Epoch Derivation</h3>
+      <p class="card-desc">
+        Formatting raw dates as ISO 8601, deriving study day under CDISC's
+        no-day-0 convention, determining EPOCH from element periods, and
+        scanning across domains for the last known contact date.
+      </p>
+      <div class="card-footer">
+        <div class="card-tech">
+          <span class="tech-pill">lubridate</span>
+          <span class="tech-pill">if_else()</span>
+          <span class="tech-pill">pivot_longer(matches())</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-code"
+             href="https://github.com/winklelu/sdtm-in-r/tree/main/R/03_date_time_epoch"
+             target="_blank">⌥ Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-card available" data-category="dataset">
+    <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
+      <span class="card-tag tag-sdtm">SDTM</span>
+      <div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--accent3);opacity:0.85;">104</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent3);letter-spacing:0.05em;opacity:0.9;">SAS &gt;&gt; R</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;">Controlled Terminology</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Controlled Terminology &amp; Code Mapping</h3>
+      <p class="card-desc">
+        Remapping raw EDC text onto CDISC Controlled Terminology, deriving
+        reference-range indicators, passing through dictionary-coded
+        fields, and looking up standardized values via format tables.
+      </p>
+      <div class="card-footer">
+        <div class="card-tech">
+          <span class="tech-pill">case_when()</span>
+          <span class="tech-pill">str_detect()</span>
+          <span class="tech-pill">left_join()</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-code"
+             href="https://github.com/winklelu/sdtm-in-r/tree/main/R/04_controlled_terminology"
+             target="_blank">⌥ Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-card available" data-category="dataset">
+    <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
+      <span class="card-tag tag-sdtm">SDTM</span>
+      <div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--accent3);opacity:0.85;">105</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent3);letter-spacing:0.05em;opacity:0.9;">SAS &gt;&gt; R</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;">SEQ, RELREC &amp; IDs</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Sequence Numbers, RELREC &amp; Identifiers</h3>
+      <p class="card-desc">
+        Assigning --SEQ, building RELREC by resolving a free-text
+        cross-reference into real sequence numbers, and expanding
+        multi-select CRF fields via wildcard column selection.
+      </p>
+      <div class="card-footer">
+        <div class="card-tech">
+          <span class="tech-pill">row_number()</span>
+          <span class="tech-pill">separate_rows()</span>
+          <span class="tech-pill">pivot_longer(starts_with())</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-code"
+             href="https://github.com/winklelu/sdtm-in-r/tree/main/R/05_seq_relrec_id"
+             target="_blank">⌥ Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-card available" data-category="dataset">
+    <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
+      <span class="card-tag tag-sdtm">SDTM</span>
+      <div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--accent3);opacity:0.85;">106</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent3);letter-spacing:0.05em;opacity:0.9;">SAS &gt;&gt; R</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;">SUPPQUAL</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">SUPPQUAL Construction</h3>
+      <p class="card-desc">
+        Building SUPPQUAL by transposing CRF fields and unioning them with
+        derived flags, or by stacking QNAM/QVAL pairs pulled from several
+        different raw domains at once.
+      </p>
+      <div class="card-footer">
+        <div class="card-tech">
+          <span class="tech-pill">pivot_longer()</span>
+          <span class="tech-pill">bind_rows()</span>
+          <span class="tech-pill">transmute()</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-code"
+             href="https://github.com/winklelu/sdtm-in-r/tree/main/R/06_suppqual"
+             target="_blank">⌥ Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-card available" data-category="dataset">
+    <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
+      <span class="card-tag tag-sdtm">SDTM</span>
+      <div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--accent3);opacity:0.85;">107</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent3);letter-spacing:0.05em;opacity:0.9;">SAS &gt;&gt; R</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;">Multi-Assessment</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Multi-Assessment Domains &amp; Repeated Measures</h3>
+      <p class="card-desc">
+        Multi-reader/central-review patterns — recovering reader identity
+        from an ID suffix, overriding unscheduled visits, carrying a
+        categorical code forward, and stacking wide assessment columns.
+      </p>
+      <div class="card-footer">
+        <div class="card-tech">
+          <span class="tech-pill">case_when()</span>
+          <span class="tech-pill">coalesce()</span>
+          <span class="tech-pill">tidyr::fill()</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-code"
+             href="https://github.com/winklelu/sdtm-in-r/tree/main/R/07_multi_assessment_domains"
+             target="_blank">⌥ Code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-card available" data-category="dataset">
+    <div class="card-preview" style="flex-direction:column;gap:0.4rem;">
+      <span class="card-tag tag-sdtm">SDTM</span>
+      <div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--accent3);opacity:0.85;">108</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent3);letter-spacing:0.05em;opacity:0.9;">SAS &gt;&gt; R</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;">String Handling</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">String Handling</h3>
+      <p class="card-desc">
+        Cleaning result strings with regex, parsing free-text enumerated
+        lists, splitting long text at a safe boundary, and separating
+        mixed number+letter values into value and qualifier.
+      </p>
+      <div class="card-footer">
+        <div class="card-tech">
+          <span class="tech-pill">str_remove()</span>
+          <span class="tech-pill">separate_rows()</span>
+          <span class="tech-pill">str_extract()</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-code"
+             href="https://github.com/winklelu/sdtm-in-r/tree/main/R/08_string_handling"
              target="_blank">⌥ Code</a>
         </div>
       </div>
