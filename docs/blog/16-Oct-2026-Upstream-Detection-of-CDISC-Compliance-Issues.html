@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-10-16">
+<meta name="description" content="Finding CDISC compliance issues in raw CRF data before SDTM is built: mapping CRF fields with data screening, method consensus and a probability-based arbiter, then checking the collected values against CDISC and P21 rules.">
+
+<title>Upstream Detection of CDISC Compliance Issues – WinSual – Winkle Lu</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../favicon.ico" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-3SYN2DR111"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-3SYN2DR111', { 'anonymize_ip': true});
+</script>
+
+
+<meta property="og:title" content="WinSual – Winkle Lu">
+<meta property="og:description" content="Clinical data visualization, CDISC standards, R/Shiny tools, and statistical programming for Pharma &amp; Biotech.">
+<meta property="og:image" content="https://winklelu.github.io/WinSual/blog/winkle.jpg">
+<meta property="og:site_name" content="WinSual – Winkle Lu">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="WinSual – Winkle Lu">
+<meta name="twitter:description" content="Clinical data visualization, CDISC standards, R/Shiny tools, and statistical programming for Pharma &amp; Biotech.">
+<meta name="twitter:image" content="https://winklelu.github.io/WinSual/blog/winkle.jpg">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">WinSual – Winkle Lu</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../Speaker.html"> 
+<span class="menu-text">Presentations</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../winviz.html"> 
+<span class="menu-text">WinViz Lab</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Upstream Detection of CDISC Compliance Issues</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">R</div>
+    <div class="quarto-category">LLM</div>
+    <div class="quarto-category">CDISC</div>
+    <div class="quarto-category">SDTM</div>
+    <div class="quarto-category">Clinical Trials</div>
+    <div class="quarto-category">R/Pharma 2026</div>
+    <div class="quarto-category">Automation &amp; Reproducible Workflows</div>
+    <div class="quarto-category">Clinical Programming &amp; Regulatory Delivery</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Finding CDISC compliance issues in raw CRF data before SDTM is built: mapping CRF fields with data screening, method consensus and a probability-based arbiter, then checking the collected values against CDISC and P21 rules.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 16, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="why-check-the-data-earlier" class="level2">
+<h2 class="anchored" data-anchor-id="why-check-the-data-earlier">Why check the data earlier?</h2>
+<p>In more than ten years of statistical programming for clinical trials, the situation I run into most is this: data issues are found only after SDTM is done. CDISC validation with tools like Pinnacle 21 (P21) usually runs after SDTM, or even ADaM, is complete. By then the programs and specs are already written, so all we can do is go back, rework the programs, and report to Data Management. Serious data issues can even reach back to the EDC and CRF design, and in the worst case call the data quality of the whole study into question. At submission, every unresolved validation issue also has to be explained in the Reviewer’s Guide.</p>
+<p>In practice, though, we never wait for clean data or database lock to start programming. While DM and PM are still working through queries, programmers are already writing the mapping and SDTM programs. <strong>The work is already upstream. Why is the checking still downstream?</strong></p>
+<p>So for my R/Pharma 2026 APAC lightning talk, I tried this: add one layer next to the existing “raw data → SDTM → ADaM → TLF” flow. Before SDTM is formally built, start from the raw CRF data, apply CDISC rules and P21 rules, and find out which data issues can be caught early, so the team can deal with them early.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig1-upstream.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 1. No change to the existing process, just an upstream layer next to it</figcaption>
+</figure>
+</div>
+</section>
+<section id="the-one-minute-summary" class="level2">
+<h2 class="anchored" data-anchor-id="the-one-minute-summary">The one-minute summary</h2>
+<ul>
+<li><strong>The idea</strong>: start from raw CRF data, map each CRF field to the SDTM variable it belongs to, then use that mapping to check the collected values against CDISC and P21 rules.</li>
+<li><strong>Scale</strong>: one mock study, 5 domains (DM, AE, EX, CM, VS), 10 raw datasets, 6,024 records, 45 subjects. 124 CRF fields went into mapping, and 57 of them have a reference answer from the aCRF for scoring.</li>
+<li><strong>Mapping accuracy: 84%</strong> (48/57, 95% CI 72–93%). When the methods agree, the answer is taken directly (94% correct); only when they disagree does a decision model that gives probabilities, Jev, make the call (74%).</li>
+<li><strong>2,015 data issues found before SDTM was built</strong>, from 40 CRF fields, covering all 45 subjects. All 5 planted high-risk errors were caught.</li>
+<li><strong>Compared with my April version, which sent every field to the LLM</strong>: accuracy 37% → 84%, machine time about 306 minutes → about 34 minutes.</li>
+<li><strong>In one sentence</strong>: LLM output is a suggestion, not an answer. Constrain it with data and standards, let a model that gives real probabilities make the call, and add human review.</li>
+</ul>
+</section>
+<section id="the-core-idea-add-a-layer-dont-change-the-process" class="level2">
+<h2 class="anchored" data-anchor-id="the-core-idea-add-a-layer-dont-change-the-process">The core idea: add a layer, don’t change the process</h2>
+<p>There are two steps:</p>
+<ol type="1">
+<li><strong>Mapping</strong>: map each CRF field to the SDTM variable it should become. For example, <code>AESTDAT</code> (Start Date) on the AE form should become <code>AESTDTC</code>.</li>
+<li><strong>Validation</strong>: once a field is mapped, you know which CDISC rules apply. For example, <code>AESTDTC</code> must follow ISO 8601 and must not be later than the subject’s last participation date; <code>SEX</code> values must be in CDISC Controlled Terminology (CT).</li>
+</ol>
+<p>Step two is not hard. Step one is: CRF field names often differ from SDTM variable names (the CRF form is called DA, the SDTM domain is EX), and each domain has dozens of candidate variables.</p>
+</section>
+<section id="data-and-reference-documents" class="level2">
+<h2 class="anchored" data-anchor-id="data-and-reference-documents">Data and reference documents</h2>
+<section id="the-dummy-data" class="level3">
+<h3 class="anchored" data-anchor-id="the-dummy-data">The dummy data</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>SDTM domain</th>
+<th>Raw datasets</th>
+<th>Records</th>
+<th>Subjects</th>
+<th>CRF fields mapped</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>DM</td>
+<td>CO, ICF, DM, TA, DS</td>
+<td>344</td>
+<td>45</td>
+<td>37</td>
+</tr>
+<tr class="even">
+<td>AE</td>
+<td>AE, AEAE</td>
+<td>1,185</td>
+<td>45</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td>EX</td>
+<td>DA</td>
+<td>153</td>
+<td>40</td>
+<td>34</td>
+</tr>
+<tr class="even">
+<td>CM</td>
+<td>CMCM</td>
+<td>532</td>
+<td>42</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>VS</td>
+<td>DM, VSVS</td>
+<td>3,977</td>
+<td>45</td>
+<td>17</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td><strong>10 dummy datasets</strong></td>
+<td><strong>6,024</strong> (unique)</td>
+<td><strong>45</strong></td>
+<td><strong>124</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The 10 datasets have 312 variables and 131,390 data cells. Common identifiers (STUDYID, PT, VISIT, etc.) and EDC system variables don’t need mapping, which leaves 111 variables that actually need a decision (124 because the raw DM dataset is processed in both the DM and VS rounds).</li>
+<li>But a field isn’t judged by its name alone: all <strong>29,229 collected values</strong> in these fields are scanned one by one. That is the biggest difference from approaches that look only at field names.</li>
+<li>Which SDTM domain a raw dataset belongs to comes from an existing mapping table (for example DA → EX); the program does not guess.</li>
+</ul>
+</section>
+<section id="cdisc-documents-and-rules-used" class="level3">
+<h3 class="anchored" data-anchor-id="cdisc-documents-and-rules-used">CDISC documents and rules used</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Document</th>
+<th>Version</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SDTMIG</td>
+<td>v3.4</td>
+<td>SDTM variable names, labels, types, Core, CDISC Notes</td>
+</tr>
+<tr class="even">
+<td>SDTM Controlled Terminology</td>
+<td>2026-09-25</td>
+<td>Valid CT values and synonyms</td>
+</tr>
+<tr class="odd">
+<td>CDASHIG</td>
+<td>v2.3</td>
+<td>Standard CRF questions, naming conventions, which fields are NOT SUBMITTED</td>
+</tr>
+<tr class="even">
+<td>SDTM and SDTMIG Conformance Rules</td>
+<td>v2.0</td>
+<td>The CDISC rule ID behind each check</td>
+</tr>
+<tr class="odd">
+<td>Pinnacle 21 validation rules</td>
+<td>312 rules</td>
+<td>Classified one by one; 42 can be checked at the CRF stage</td>
+</tr>
+<tr class="even">
+<td>ISO 8601, CTCAE</td>
+<td>—</td>
+<td>Date/time format, toxicity grades 1–5</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>The reference answers used for scoring are kept away from the decision process</strong>: the aCRF answers are used only for scoring afterwards, and no method can see them while deciding. Any rule change must also have a general basis (CDISC/CDASH conventions, common sense about data types), never a tweak made to get one specific field right.</li>
+</ul>
+</section>
+</section>
+<section id="the-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="the-pipeline">The pipeline</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig2-pipeline.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 2. Eight steps from raw CRF data to a Quarto report</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Step 00: Prepare CRF</td>
+<td>Find this round’s raw datasets from the mapping table; drop common identifiers and EDC system variables; profile each field’s collected values (type, range, number of distinct values, common values)</td>
+</tr>
+<tr class="even">
+<td>Step 01: CDISC references</td>
+<td>Load SDTMIG variable definitions, valid CT values and Conformance Rules; derive each variable’s expected type (date / numeric / coded / text) from SDTMIG</td>
+</tr>
+<tr class="odd">
+<td>Step 02: Mapping</td>
+<td>Data-Fit Screening builds a shortlist first; the dictionary, text2vec, Gemma 3 12B, 4B and Structured Chat each decide within it</td>
+</tr>
+<tr class="even">
+<td>Step 03: Final result</td>
+<td>CDASH rule → method consensus → Jev arbitration when methods disagree</td>
+</tr>
+<tr class="odd">
+<td>Step 04: Dictionary</td>
+<td>Final results go into the custom dictionary for reuse next time</td>
+</tr>
+<tr class="even">
+<td>Step 05: Validation</td>
+<td>Check the collected values using the final mapping (CHK001–011, MAP001)</td>
+</tr>
+<tr class="odd">
+<td>Step 06: Report</td>
+<td>Interactive Quarto HTML report + per-variable drill-down Excel</td>
+</tr>
+<tr class="even">
+<td>Step 07: Run log</td>
+<td>Each run’s data volume, method run times and accuracy are logged automatically</td>
+</tr>
+</tbody>
+</table>
+<p>Tech stack: R + tidyverse + text2vec + ellmer + Quarto + YAML. Gemma 3 12B and 4B run locally through Ollama; the arbiter, Jev, is called through an API and receives metadata only. The whole pipeline runs end to end with a single command.</p>
+</section>
+<section id="step-one-how-a-crf-field-gets-mapped-to-an-sdtm-variable" class="level2">
+<h2 class="anchored" data-anchor-id="step-one-how-a-crf-field-gets-mapped-to-an-sdtm-variable">Step one: how a CRF field gets mapped to an SDTM variable</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig3-decision.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 3. The decision path for one CRF field: rule out the impossible with rules and data, let several methods answer on their own, take the answer when they agree, and arbitrate only when they don’t</figcaption>
+</figure>
+</div>
+<p>I’ll walk one field through every method: the AE start date, <strong>AESTDAT</strong>.</p>
+<pre><code>CRF form     : 53.Adverse Events
+CRF variable : AESTDAT
+CRF label    : Start Date
+Values       : 20150422, 20170430, 20160321, 20150413, ... (133 distinct values, all dates)</code></pre>
+<section id="cdash-not-submitted-rule-if-the-standard-says-dont-submit-it-dont-ask-a-model" class="level3">
+<h3 class="anchored" data-anchor-id="cdash-not-submitted-rule-if-the-standard-says-dont-submit-it-dont-ask-a-model">① CDASH “not submitted” rule: if the standard says don’t submit it, don’t ask a model</h3>
+<ul>
+<li>The CDASHIG v2.3 Mapping Instructions state which fields are “NOT SUBMITTED / Does not map”: screening questions like “Were any adverse events experienced?” (AEYN), SAE-reporting-only fields, and cross-form link IDs. 55 fields in total.</li>
+<li>A CRF variable with the same name as one of these is set to <strong>NONE</strong> directly, without calling any model.</li>
+<li>In this study only AEYN in AE applies, but that one rule alone lifted AE accuracy from 77% to 85% (the LLM had forced it onto AETERM).</li>
+<li>Limitation: it only recognizes standard names. If the CRF calls the field AEVYN, the rule misses it.</li>
+</ul>
+</section>
+<section id="data-fit-screening-look-at-the-data-first-and-rule-out-the-impossible" class="level3">
+<h3 class="anchored" data-anchor-id="data-fit-screening-look-at-the-data-first-and-rule-out-the-impossible">② Data-Fit Screening: look at the data first and rule out the impossible</h3>
+<p>This was the first suggestion from Professor Michał Ramsza at SGH Warsaw School of Economics: since we have the actual collected values, use them first to rule out SDTM variables whose type or range doesn’t fit at all.</p>
+<ol type="1">
+<li>Step 00 profiles each CRF field’s value type: date (YYYYMMDD), time (HHMM), numeric, text or empty, allowing up to 10% exceptions (such as <code>ND</code> in a weight field).</li>
+<li>Step 01 labels each SDTM variable as date, numeric, coded or text, based on its SDTMIG Type and Codelist.</li>
+<li>Only compatible variables are kept: date → date; time → date (to be combined into <code>--DTC</code> later); numeric → numeric/text; text → coded/text.</li>
+<li>Numeric variables must fall within a plausible range (for example AGE 0–120); fields with more than 20 distinct values are not matched to coded variables.</li>
+<li><strong>Principle: rule out only the impossible, never the merely unlikely.</strong> A correct answer that gets ruled out can’t be recovered by any later method, only added back by a person.</li>
+</ol>
+<p>Results:</p>
+<ul>
+<li>AESTDAT: of AE’s 60 SDTM variables, only <strong>3</strong> remain (AESTDTC, AEENDTC, AEDUR).</li>
+<li>The candidate lists shrink by about half (DM 32 → 16.6, AE 60 → 29.7), with <strong>96% recall</strong> (the correct answer stays on the list in 49/51 cases). No LLM involved, under 1 second.</li>
+<li>Shorter lists also make the LLMs faster: for the same 37 DM fields, 12B went from 355 to 229 seconds (−35%), 4B from 199 to 124 seconds (−38%), and arbitration from 722 to 526 seconds (−27%).</li>
+<li>A field with an empty list (for example, no collected values at all) is set to NONE without calling an LLM.</li>
+</ul>
+</section>
+<section id="custom-dictionary-save-confirmed-answers" class="level3">
+<h3 class="anchored" data-anchor-id="custom-dictionary-save-confirmed-answers">③ Custom dictionary: save confirmed answers</h3>
+<ul>
+<li>Keyed on “CRF variable name + domain”. Each round’s final results are written into the dictionary, so the next time a field with the same name appears, it’s a direct hit. Entries confirmed by a person take priority and are never overwritten.</li>
+<li>This time every domain started with an empty dictionary (0 hits), so it couldn’t “cheat” with old answers from the same study. It now holds 124 entries, so in the next study AESTDAT will hit AESTDTC directly.</li>
+</ul>
+</section>
+<section id="text2vec-compare-the-words" class="level3">
+<h3 class="anchored" data-anchor-id="text2vec-compare-the-words">④ text2vec: compare the words</h3>
+<ul>
+<li>CRF-side text = variable name + CDASH form + label (for example <code>AESTDAT AESTDTC Start Date</code>); SDTM-side text = variable name + label + CDISC Notes.</li>
+<li>Tokenize, build TF-IDF, compute cosine similarity, and rank only within the shortlist. <code>--DAT</code>/<code>--TIM</code> at the end of a CRF variable name are first turned into <code>--DTC</code> (CDASH naming convention).</li>
+<li>AESTDAT: AESTDTC <strong>0.61</strong>, AEENDTC 0.26, AEDUR 0.14.</li>
+<li>This is <strong>lexical</strong> similarity, not semantic similarity. But because it works differently from an LLM, it also fails differently, and that turns out to matter a lot.</li>
+</ul>
+</section>
+<section id="gemma-3-12b-let-the-llm-rank-the-shortlist" class="level3">
+<h3 class="anchored" data-anchor-id="gemma-3-12b-let-the-llm-rank-the-shortlist">⑤ Gemma 3 12B: let the LLM rank the shortlist</h3>
+<ul>
+<li>The prompt contains each shortlisted candidate’s name, label, type, Core and Notes, plus the CRF field’s name, label, value type and sample values.</li>
+<li>Structured output restricts the answer to “shortlisted variables + NONE”: up to 5, no padding, each with a confidence score from 0 to 1.</li>
+<li>AESTDAT: AESTDTC <strong>1.00</strong>, AEENDTC 0.30, AEDUR 0.10.</li>
+</ul>
+</section>
+<section id="gemma-3-4b-one-answer-plus-a-reason" class="level3">
+<h3 class="anchored" data-anchor-id="gemma-3-4b-one-answer-plus-a-reason">⑥ Gemma 3 4B: one answer plus a reason</h3>
+<ul>
+<li>Same prompt, but it returns only one answer, a confidence score and a one- or two-sentence reason citing the SDTMIG definition. The reason is passed on to the arbiter.</li>
+<li>AESTDAT: AESTDTC (0.95), reason: “both are date fields and the observed values are in a compatible date format (YYYYMMDD)”.</li>
+<li>With long prompts at temperature 0, 4B tends to get stuck repeating itself, so I added an output length limit, a repetition penalty and retries on failure.</li>
+</ul>
+</section>
+<section id="structured-chat-ask-the-other-way-around" class="level3">
+<h3 class="anchored" data-anchor-id="structured-chat-ask-the-other-way-around">⑦ Structured Chat: ask the other way around</h3>
+<p>This was Professor Ramsza’s second suggestion: instead of taking one CRF field and searching all SDTM variables, turn it around. Take each SDTM variable’s description and extract “which CRF field collects this” from the CRF fields.</p>
+<ol type="1">
+<li><strong>Generate SDTM summaries</strong> (once per domain, 12B): the input is the SDTMIG label and Notes, the CDASHIG question text, and CRF label style examples from other forms. <strong>The current round’s CRF fields are hidden while summaries are generated</strong>, so the answer can’t leak into the description. Example: AESTDTC → “Record the date and time when the adverse event began.”</li>
+<li><strong>Set the processing order</strong>: variables with a CDASH counterpart go first; identifiers (STUDYID, USUBJID) go last.</li>
+<li><strong>Extract in a loop</strong>: give 12B the summary plus the CRF fields that are “not yet taken and on the shortlist”, and ask “Which field collects this? Answer NO_MATCH if none.” The chosen field is removed and the question is asked again, up to 3 times per variable.</li>
+</ol>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Try</th>
+<th>Available fields</th>
+<th>Picked</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>AESTDAT, AESTTIM, AEENDAT, AEENTIM</td>
+<td>AESTDAT (Start Date)</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>AESTTIM, AEENDAT, AEENTIM</td>
+<td>AESTTIM (Start Time)</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>AEENDAT, AEENTIM</td>
+<td>AEENDAT (Stop date)</td>
+<td>❌ wrong, and the field is now taken</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Overall it reached only 35%, the lowest of all methods (see “Discussion” for why). But it was the only method that got DSNDTC → DTHDTC right, so I kept it as “another point of view” for the arbiter. It doesn’t vote in the consensus.</li>
+</ul>
+</section>
+<section id="method-consensus-when-methods-that-work-differently-agree-take-the-answer" class="level3">
+<h3 class="anchored" data-anchor-id="method-consensus-when-methods-that-work-differently-agree-take-the-answer">⑧ Method consensus: when methods that work differently agree, take the answer</h3>
+<ul>
+<li>If the top answers of text2vec, 12B and 4B are identical, on the shortlist and not in conflict with the dictionary, the answer is taken directly and the arbiter is not called.</li>
+<li>AESTDAT: all three say AESTDTC → accepted. ✅</li>
+<li>This case is right <strong>94% of the time (30/32)</strong>. 44 of the 124 fields were decided by consensus. When I also sent those 44 to the LLM arbiter, it agreed with the consensus 44 out of 44 times, so skipping arbitration doesn’t change accuracy, and arbiter calls dropped from 106 to 62.</li>
+</ul>
+</section>
+<section id="jev-arbitration-when-methods-disagree-let-a-decision-model-that-gives-probabilities-decide" class="level3">
+<h3 class="anchored" data-anchor-id="jev-arbitration-when-methods-disagree-let-a-decision-model-that-gives-probabilities-decide">⑨ Jev arbitration: when methods disagree, let a decision model that gives probabilities decide</h3>
+<p>Now a field where the methods disagree: <strong>AESEV</strong> in AE. Its label says “CTCAE Grade”, and the values are <code>GRADE 1 - MILD</code>, <code>GRADE 3 - SEVERE</code>, <code>GRADE 5 - DEATH</code>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Top answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>text2vec</td>
+<td><strong>AETOXGR</strong> (0.34): the AETOXGR definition mentions CTCAE</td>
+</tr>
+<tr class="even">
+<td>Gemma 3 12B</td>
+<td>AESEV (self-rated <strong>1.00</strong>): fooled by the variable name</td>
+</tr>
+<tr class="odd">
+<td>Gemma 3 4B</td>
+<td>AESEV (0.95)</td>
+</tr>
+<tr class="even">
+<td>Structured Chat</td>
+<td>AELLT</td>
+</tr>
+</tbody>
+</table>
+<p>No consensus, so it goes to <strong>TypeSafe Jev</strong> (<code>typesafe/jev-1.13</code>). Jev is a decision model: it reads text but doesn’t write text; instead it gives a probability for every option in the question. I framed arbitration as a multiple-choice question, and Jev returned:</p>
+<pre><code>choice: AETOXGR
+probabilities: AETOXGR 0.92 | AESEV 0.07 | NONE 0.01</code></pre>
+<ul>
+<li>The result is AETOXGR, matching the aCRF. ✅ Each call takes about 0.5 seconds; all 62 calls together cost about US$0.008.</li>
+<li><strong>Metadata only</strong>: form name, variable name, label, value type, each method’s top 3 with scores, and SDTMIG definitions. <strong>No collected values are sent.</strong> The Gemma 3 models still run locally with Ollama, so raw values never leave the machine.</li>
+<li>Another example: CMINDCNO “AE No.” in CM (values <code>1</code>, <code>2</code>, <code>3</code>). 12B, 4B and Structured Chat all chose CMINDC (indication); Jev gave <strong>NONE 0.84</strong> → NONE ✅. Fields like this are used to build RELREC, not placed directly in CM.</li>
+</ul>
+<p><strong>Why is Jev only the arbiter and not a voter?</strong> I tested four setups (57 fields):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Setup</th>
+<th>Accuracy</th>
+<th>vs.&nbsp;original: fixed / broken</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>① 3-method consensus + 12B arbiter (original)</td>
+<td>70%</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><strong>② 3-method consensus + Jev arbiter (adopted)</strong></td>
+<td><strong>82%</strong></td>
+<td>7 / 0 (McNemar p = 0.023)</td>
+</tr>
+<tr class="odd">
+<td>③ Jev added to consensus vote + 12B arbiter</td>
+<td>72%</td>
+<td>1 / 0</td>
+</tr>
+<tr class="even">
+<td>④ Jev added to consensus vote + Jev arbiter</td>
+<td>82%</td>
+<td>Same answers as ②</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>As an independent method (alongside 12B and 4B), Jev was only slightly ahead (75% vs.&nbsp;70%, not significant). In the arbiter seat, where it can see every method’s answer, its effect is largest. After the official rerun the final result was <strong>84%</strong>. The one extra correct field is CMINDCMH, where two options were both around 0.5; near-ties aren’t fully reproducible, which is why I keep every raw response.</li>
+</ul>
+</section>
+</section>
+<section id="step-two-check-the-collected-values-using-the-mapping" class="level2">
+<h2 class="anchored" data-anchor-id="step-two-check-the-collected-values-using-the-mapping">Step two: check the collected values using the mapping</h2>
+<p>Once a CRF field is mapped, it’s clear which rules apply. The checks fall into three groups: <strong>CDISC conformance</strong> (format, CT, required), <strong>P21 rules</strong>, and <strong>clinical logic</strong> (date order, plausible ranges).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>What it checks</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CHK001</td>
+<td>Date/time format (YYYYMMDD / HHMM must become ISO 8601; unparseable values listed record by record)</td>
+<td>ISO 8601; CG0011</td>
+</tr>
+<tr class="even">
+<td>CHK002</td>
+<td>Req variable has no CRF source or is entirely blank; duplicate SUBJID</td>
+<td>SDTMIG Core = Req; CG0150</td>
+</tr>
+<tr class="odd">
+<td>CHK003</td>
+<td>Date before informed consent</td>
+<td>CG0143 (related)</td>
+</tr>
+<tr class="even">
+<td>CHK004</td>
+<td>Value not in CDISC CT (with a suggested value when a synonym matches)</td>
+<td>SDTM CT; CG0011, CG0020, CG0021</td>
+</tr>
+<tr class="odd">
+<td>CHK005</td>
+<td>Cross-form consistency (ARMNRS, DTHFL/DTHDTC, AGEU)</td>
+<td>SDTMIG DM assumptions</td>
+</tr>
+<tr class="even">
+<td>CHK006</td>
+<td>Value differs from the EDC system variable (full value)</td>
+<td>Added by this tool</td>
+</tr>
+<tr class="odd">
+<td>CHK007</td>
+<td>Start date after end date</td>
+<td>P21 SD0013</td>
+</tr>
+<tr class="even">
+<td>CHK008</td>
+<td>Event date after the subject’s last participation date (date of death, if the subject died)</td>
+<td>P21 SD1202–SD1204, SD0080</td>
+</tr>
+<tr class="odd">
+<td>CHK009</td>
+<td>CTCAE grade outside 1–5</td>
+<td>CTCAE</td>
+</tr>
+<tr class="even">
+<td>CHK010</td>
+<td>Outside clinically plausible range (height, weight, blood pressure, pulse, temperature, etc.)</td>
+<td>Added by this tool</td>
+</tr>
+<tr class="odd">
+<td>CHK011</td>
+<td>Other P21 rules checkable at the CRF stage</td>
+<td>P21 (312 rules classified one by one)</td>
+</tr>
+<tr class="even">
+<td>MAP001</td>
+<td>Mapping plausibility alert: collected values share nothing with the chosen SDTM variable’s CT</td>
+<td>Added by this tool</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>How the P21 rules were chosen</strong>: all 312 rules were classified by “can this be checked at the CRF stage?” and compiled into a reference table. 42 can: 15 were already covered by existing checks and 27 were added. The rest need SDTM derivations first (MedDRA coding, study day, standardized results) or are structural checks such as define.xml.</li>
+<li>The P21 rules are based on the FDA Business Rules used by Pinnacle 21 for submission checks.</li>
+</ul>
+</section>
+<section id="what-the-report-looks-like" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-report-looks-like">What the report looks like</h2>
+<p>The report is generated with Quarto as an English HTML file that opens offline:</p>
+<ul>
+<li><strong>Sections 1–2</strong>: which raw datasets were processed, and which standards and versions were applied.</li>
+<li><strong>Sections 3–4</strong>: summary and problem list. Issues with the same field and the same check are grouped into one problem (for example P026), showing the raw dataset, CRF field, number of records and number of subjects.</li>
+<li><strong>Section 5</strong>: click a problem ID to jump to the details. Each record shows the subject, the visit, <strong>the row number in the raw data</strong>, a record identifier (such as <code>AESPID=1, AETERM=VOMITING</code>) and the value. You can send it straight to Data Management.</li>
+<li><strong>Section 6</strong>: full-text search (subject ID, field name, value).</li>
+<li>Each domain also gets a per-variable drill-down Excel file, listing every method’s top answers and the final result for each CRF field.</li>
+<li>Study drug names in the report are masked automatically (Drug A / B / C).</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig4-report-overview.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 4. Top of the report: raw datasets processed and standards applied</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig5-problem-detail.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 5. Problem detail: P026 (P21 SD0009, a serious AE with no seriousness criteria). Every record points to the subject and the raw data row</figcaption>
+</figure>
+</div>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<section id="mapping-accuracy-and-run-time" class="level3">
+<h3 class="anchored" data-anchor-id="mapping-accuracy-and-run-time">1. Mapping accuracy and run time</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig6-method-accuracy.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 6. Top-1 accuracy and machine time by method (5 domains, 57 scorable fields)</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>DM (11)</th>
+<th>AE (13)</th>
+<th>EX (10)</th>
+<th>CM (15)</th>
+<th>VS (8)</th>
+<th>Overall (57)</th>
+<th>Time (s)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Data-Fit Screening (recall)</td>
+<td>100%</td>
+<td>100%</td>
+<td>80%</td>
+<td>100%</td>
+<td>100%</td>
+<td>96%</td>
+<td>&lt; 1</td>
+</tr>
+<tr class="even">
+<td>text2vec</td>
+<td>73%</td>
+<td>69%</td>
+<td><strong>20%</strong></td>
+<td>73%</td>
+<td>50%</td>
+<td>60%</td>
+<td>&lt; 1</td>
+</tr>
+<tr class="odd">
+<td>Gemma 3 12B</td>
+<td>73%</td>
+<td>85%</td>
+<td>70%</td>
+<td>67%</td>
+<td>50%</td>
+<td>70%</td>
+<td>923</td>
+</tr>
+<tr class="even">
+<td>Gemma 3 4B</td>
+<td>64%</td>
+<td>77%</td>
+<td>70%</td>
+<td>67%</td>
+<td>50%</td>
+<td>67%</td>
+<td>526</td>
+</tr>
+<tr class="odd">
+<td>Structured Chat</td>
+<td>64%</td>
+<td>38%</td>
+<td>40%</td>
+<td>13%</td>
+<td>25%</td>
+<td>35%</td>
+<td>545 (plus 1,505 one-time for summaries)</td>
+</tr>
+<tr class="even">
+<td>Final result (consensus + 12B arbiter, Oct 5)</td>
+<td>73%</td>
+<td>85%</td>
+<td>70%</td>
+<td>67%</td>
+<td>50%</td>
+<td>70%</td>
+<td>Arbitration 1,209</td>
+</tr>
+<tr class="odd">
+<td><strong>Final result (consensus + Jev arbiter, Oct 13)</strong></td>
+<td>73%</td>
+<td><strong>92%</strong></td>
+<td>70%</td>
+<td><strong>100%</strong></td>
+<td><strong>75%</strong></td>
+<td><strong>84%</strong> (48/57, 95% CI 72–93%)</td>
+<td>Arbitration <strong>34</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>A naming-gap example</strong>: in EX, where the CRF form is called DA, text2vec reached only 20% while the LLMs still reached 70%. When word matching fails, semantic understanding earns its keep.</li>
+<li>With Jev as the arbiter, total machine time across the 5 domains was about <strong>34 minutes</strong> (12B 923 s, 4B 526 s, Structured Chat 545 s, arbitration 34 s; Step 02 reused the Oct 5 results), plus about 25 minutes one-time for the SDTM summaries. With the 12B arbiter, the same part took about 54 minutes.</li>
+</ul>
+</section>
+<section id="what-if-you-just-send-every-field-to-the-llm" class="level3">
+<h3 class="anchored" data-anchor-id="what-if-you-just-send-every-field-to-the-llm">2. What if you just send every field to the LLM?</h3>
+<p>I built a first version in April (blog post “Running Local LLM in Clinical Trial Workflows”). It had no domain mapping table and no screening by collected values. Every field, including EDC system variables and the same field repeated on every visit form, went through text2vec → Gemma 3 12B → 4B, and 2,200 fields took 13 hours. Here is the comparison, scored afterwards against the same reference answers, the same 57 fields and the same scoring rules:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig7-april-vs-now.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 7. Same 10 raw datasets, same 57 fields: everything to the LLM vs.&nbsp;constraining the LLM with data and standards first</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>April version (all fields to LLM)</th>
+<th>Oct 5 (screening + consensus + 12B arbiter)</th>
+<th>Oct 13 (screening + consensus + Jev arbiter)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fields sent through the pipeline</td>
+<td>864 (432 of them EDC system variables)</td>
+<td>124</td>
+<td>124</td>
+</tr>
+<tr class="even">
+<td>Machine time</td>
+<td>About 306 min (estimated)</td>
+<td>About 54 min</td>
+<td>About 34 min</td>
+</tr>
+<tr class="odd">
+<td>Per unique field</td>
+<td>About 116 s</td>
+<td>About 26 s</td>
+<td>About 16 s</td>
+</tr>
+<tr class="even">
+<td>Mapping accuracy (57 fields)</td>
+<td>37% (21/57)</td>
+<td>70% (40/57)</td>
+<td><strong>84% (48/57)</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The April time for these 10 datasets is estimated from “13 hours ÷ 2,200 fields”. The April version also had to guess the domain and often got it wrong (the DA form wasn’t recognized as EX, so EX scored 0/10). Looking only at the 29 fields where April got the domain right, accuracy still went from 59% to 76% (Oct 5 version).</li>
+<li><strong>The Oct 5 and April versions use the same Gemma 3 12B and 4B.</strong> The improvement didn’t come from a bigger model. It came from leaving out data that shouldn’t be reviewed (EDC system variables compared record by record instead, each variable processed once), narrowing candidates with collected values, method consensus and CDASH rules. Swapping the arbiter on Oct 13 was the only “model” change.</li>
+</ul>
+</section>
+<section id="data-issues-found-before-sdtm-was-built" class="level3">
+<h3 class="anchored" data-anchor-id="data-issues-found-before-sdtm-was-built">3. Data issues found before SDTM was built</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig8-issue-types.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 8. The 2,015 issues in the official data, by type</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>2,015 issues, grouped into 71 problems</strong>, from 40 CRF fields, covering all 45 subjects.</li>
+<li><strong>The most common: collected values not in CDISC CT (969)</strong>. SEX recorded as <code>FEMALE</code>/<code>MALE</code>, route as <code>PO</code>/<code>IV</code>, dose form as <code>TAB</code>/<code>CAP</code>, VS units as <code>beats per minute</code>, AE severity as <code>GRADE 1 - MILD</code>.</li>
+<li><strong>714 from P21 rules</strong>: for example, a serious AE with no seriousness criteria (SD0009, 15 records, 8 subjects), or a randomized subject with no dosing record.</li>
+<li><strong>The issues are systematic</strong>: a field is written the same way for every subject (SEX for 45 of 45), so you fix the field, not each record. One conversion table solves the whole column, and it can be ready before the SDTM programs are written, or DM can adjust the EDC options.</li>
+<li><strong>Only 3 false alarms remain from wrong mappings</strong> (counting fields annotated on the aCRF); with the 12B arbiter there were about 465. Mapping quality directly decides how much you can trust validation.</li>
+</ul>
+</section>
+<section id="planted-errors-are-they-caught" class="level3">
+<h3 class="anchored" data-anchor-id="planted-errors-are-they-caught">4. Planted errors: are they caught?</h3>
+<p>I planted 5 high-risk errors in a copy of the raw data (a different subject for each) and reran the same pipeline:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Planted error</th>
+<th>Blind test (CDISC conformance checks only)</th>
+<th>After adding P21 rules and clinical logic</th>
+<th>Caught by</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Death date before informed consent</td>
+<td>✅</td>
+<td>✅</td>
+<td>CHK003</td>
+</tr>
+<tr class="even">
+<td>AE after death</td>
+<td>❌</td>
+<td>✅</td>
+<td>CHK008 (P21 SD0080)</td>
+</tr>
+<tr class="odd">
+<td>AE grade 6</td>
+<td>⚠️ lost among existing CT issues</td>
+<td>✅</td>
+<td>CHK009</td>
+</tr>
+<tr class="even">
+<td>Height of 300 cm</td>
+<td>❌</td>
+<td>✅</td>
+<td>CHK010</td>
+</tr>
+<tr class="odd">
+<td>AE end date before start date</td>
+<td>❌</td>
+<td>✅</td>
+<td>CHK007 (P21 SD0013)</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td><strong>1 / 5</strong></td>
+<td><strong>5 / 5</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>All added checks are general rules, not tailored to the planted values. On the official data without planted errors, CHK007, CHK009 and CHK010 found 0 issues, so there were no false alarms.</li>
+<li><strong>A height of 300 cm passes every format check.</strong> Only clinical logic catches it. CDISC conformance checks and clinical logic checks are different things, and upstream detection needs both.</li>
+<li><strong>The most convincing finding</strong>: in the official data, CHK008 found a serious adverse event, “SEPTIC SHOCK”, starting after the subject’s last participation date. This mock data was adapted from a completed study, and in that study’s P21 report at submission, the event that triggered SD0080 was this same one. <strong>An issue that P21 caught only at the SDTM submission stage, this pipeline found at the raw CRF stage.</strong></li>
+</ul>
+</section>
+</section>
+<section id="discussion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<section id="an-llms-stated-confidence-is-not-a-probability" class="level3">
+<h3 class="anchored" data-anchor-id="an-llms-stated-confidence-is-not-a-probability">An LLM’s stated confidence is not a probability</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/rpharma-upstream-fig9-confidence.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 9. The 23 fields where methods disagreed: 12B’s stated confidence vs.&nbsp;actual accuracy, and Jev’s probability vs.&nbsp;actual accuracy</figcaption>
+</figure>
+</div>
+<ul>
+<li>On the 23 fields arbitrated by 12B, its average stated confidence was <strong>0.94</strong>, but it was right only <strong>39%</strong> of the time (Brier score 0.53, worse than answering 0.5 for every field). Of the 6 fields with confidence above 0.95, it got only 2 right; for AESEV it said 1.00 and was wrong.</li>
+<li>The reason is simple: “confidence: 0.95” in the model’s output is <strong>a piece of text it generated</strong>, not a measured probability, so you can’t use it as an “accept automatically above this threshold” rule.</li>
+<li>Jev doesn’t generate text; it returns a probability distribution over the options. On the same 23 fields, its average probability was 0.80 and actual accuracy 70% (side experiment), with a Brier score of 0.21, much closer to reality.</li>
+<li>To be fair, though: of the 10 fields where Jev’s probability was ≥ 0.9, 7 were right. The sample is too small for that to work as an automatic threshold on its own. For now the approach is: accept method consensus automatically, sort the rest by probability, and send the lowest to a person first.</li>
+</ul>
+</section>
+<section id="look-at-which-methods-agree-not-how-many" class="level3">
+<h3 class="anchored" data-anchor-id="look-at-which-methods-agree-not-how-many">Look at which methods agree, not how many</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Signal</th>
+<th>Group</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Number of agreeing methods</td>
+<td>1 / 2 / 3 / 4 methods agree</td>
+<td>20% / 60% / 69% / 100%</td>
+</tr>
+<tr class="even">
+<td>Does the agreement include text2vec?</td>
+<td>Yes / No</td>
+<td>86% (31/36) / 43% (9/21)</td>
+</tr>
+<tr class="odd">
+<td>Three votes each</td>
+<td>12B + 4B + text2vec / LLMs only</td>
+<td>10/12 / <strong>2/9</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>LLM errors are highly correlated: similar models make the same semantic misreadings, so three LLM votes are really one. text2vec compares words and fails differently, so its vote is the independent evidence. <strong>The value of consensus comes from how different the methods are, not from the vote count.</strong></li>
+<li>Triage simulation: accept method consensus automatically (32 fields, 94%) and send the rest to a person (25 fields), and 15 of the 17 errors are caught.</li>
+</ul>
+</section>
+<section id="why-did-the-method-with-the-most-information-do-worst" class="level3">
+<h3 class="anchored" data-anchor-id="why-did-the-method-with-the-most-information-do-worst">Why did the method with the most information do worst?</h3>
+<p>Structured Chat gives the model the most text (SDTMIG + CDASHIG + 12B-generated summaries), so you’d expect it to be the most accurate. It reached only 35%. It lost on decision structure, not on information:</p>
+<ol type="1">
+<li><strong>Variables processed first take the fields</strong>: 9 of AE’s 17 fields were taken by AELLT, AEDECOD and AEMODIFY, three MedDRA coding variables that never appear on a CRF.</li>
+<li><strong>Asking in reverse creates many chances to be wrong</strong>: AE has 60 SDTM variables but the CRF has only 17 fields. Most variables have no matching field, yet each one gets asked, and a small model rarely answers NO_MATCH.</li>
+<li><strong>The summaries don’t discriminate</strong>: the summaries for AETERM, AELLT and AEDECOD all talk about “adverse event term”.</li>
+<li><strong>It ignores the strongest signal, the variable name</strong>: on the 24 fields whose names match, the other methods got almost all right; Structured Chat got 7.</li>
+<li><strong>It looks at one SDTM variable at a time</strong>: it decides “does this variable want this field?” without seeing that a better variable comes later, and once a field is taken there’s no going back.</li>
+</ol>
+<p>Ways to improve it: exclude variables a CRF never collects (MedDRA coding, <code>--DY</code>, <code>--SEQ</code>), let every variable pick once and then assign globally, and add CDASH variable names to the summaries.</p>
+</section>
+<section id="errors-cluster-in-fields-whose-names-differ" class="level3">
+<h3 class="anchored" data-anchor-id="errors-cluster-in-fields-whose-names-differ">Errors cluster in fields whose names differ</h3>
+<ul>
+<li>All 24 fields whose CRF name matches the SDTM name were right; 24 of the 33 with different names were right (16 with the 12B arbiter).</li>
+<li>The hardest are fields with different names that aren’t covered by date/time naming rules: AEONGO → AEENRF, CMONGO → CMENRF, height and weight that must be transposed into the vertical VS structure, and conditional mappings like DSNDTC, which is DTHDTC only when DEATH is checked.</li>
+<li>Put the other way: <strong>CDASH naming on the CRF is the best quality control there is.</strong> The number of issues also depends on CRF design rather than data volume: VS is 52% of the values scanned but only about 23% of the issues, while DM and AE have the highest issue density because they collect readable text instead of CT values.</li>
+</ul>
+</section>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<ul>
+<li><strong>Small sample</strong>: one study, 57 scorable fields; the 95% CI for 84% is 72–93%, and each domain has only 8–15 fields.</li>
+<li><strong>84% isn’t enough to automate mapping</strong>: this is an early-warning and triage tool. It doesn’t replace formal SDTM specifications, P21 or human review.</li>
+<li><strong>The 9 fields still wrong</strong> are mostly conditional mappings (DSNDTC, DSNORES, DSNSRES), VS fields that need transposing (BSA, HEIGHT), and fields whose reference answer deserves a second look (DAODDOSE holds dose numbers, yet the aCRF marks it as the unit, EXDOSU).</li>
+<li><strong>Post-hoc analysis on one dataset</strong>: the grouping rules were set before looking at the reference answers, but they haven’t been validated on another study.</li>
+<li><strong>Jev is an external service</strong>: even though it receives only metadata, its use still needs to be checked against company data policy, and near-tie answers aren’t fully reproducible.</li>
+<li><strong>The CDASH rule recognizes only standard names</strong>: non-standard screening questions such as AEVYN and DSYN can still be mismapped.</li>
+<li><strong>Among the 714 P21-rule issues</strong>, some rules (for example dose units, or <code>--DOSE</code> and <code>--DOSTXT</code> both filled) may over-trigger at the CRF stage; they haven’t been checked record by record yet.</li>
+</ul>
+</section>
+<section id="closing-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="closing-thoughts">Closing thoughts</h2>
+<p>This isn’t a tool that generates SDTM automatically. It’s an early warning that brings data issues to the surface <strong>while data is still being collected</strong>: which fields the problems sit in, which subjects they affect, which row of the raw data, and how to fix them. Serious issues can go to DM and PM early so they can decide what to fix, without waiting for SDTM and ADaM to be done and then reworking the programs. Whatever can be handled upstream shouldn’t be left for the Reviewer’s Guide.</p>
+<p>My biggest takeaway: <strong>LLM output is a suggestion, not an answer.</strong> First rule out the impossible with data and CDISC standards, then check whether methods that work differently agree, hand the disagreements to a model that gives real probabilities, and finish with human review. These constraints improved results more than a bigger model would have.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li>CDISC SDTMIG v3.4, SDTM Controlled Terminology (2026-09-25), CDASHIG v2.3, SDTM and SDTMIG Conformance Rules v2.0</li>
+<li>Pinnacle 21 validation rules (FDA Business Rules)</li>
+<li>Yang E, Katz L, Shenoy S (2024). Automated mapping of electronic data capture fields to SDTM. <em>PLoS ONE</em> 19(11): e0312721. <a href="https://doi.org/10.1371/journal.pone.0312721" class="uri">https://doi.org/10.1371/journal.pone.0312721</a> (eCRF → SDTM mapping with a Siamese network + kNN; Top-5 90.4%, but it needs large amounts of labeled data and can’t explain its decisions)</li>
+<li>Thanks to Professor Michał Ramsza (SGH Warsaw School of Economics) for two method suggestions: filtering candidates with actual values, and Structured Chat entity extraction</li>
+<li>Previous post: <a href="../blog/14-APR-2026-Local-LLM-Clinical-Trial-Workflow.html">Running Local LLM in Clinical Trial Workflows: From Setup to Real-World Experience</a> (2026-04-14)</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/winklelu\.github\.io\/WinSual\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
