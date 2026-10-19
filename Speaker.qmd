@@ -5,6 +5,29 @@ format: html
 
 ---
 
+### 🔹 R/Pharma 2026 APAC (Lightning Talk)
+
+[![](slides/thumb_rpharma2026_apac.png){width=300px}](slides/RPharma2026_APAC_Lightning_Talk_Upstream_Detection_of_CDISC_Compliance_Issues.pdf)
+
+**Title:** Upstream Detection of CDISC Compliance Issues: Raw Data Quality Review with Local LLM and R  
+📍 *Status:* 2026-10-20 — Virtual  
+📝 *Summary:*  
+Detecting raw data issues as early as possible, before raw data quality impacts workflows, data analysis, or submission timelines — is the core challenge this tool aims to solve.
+
+In clinical trial data management, one of the most common frustrations for programmers is discovering data quality issues only after SDTM datasets are completed. This leads to repeated program revisions and rework. When a study requires regulatory submission to agencies such as the FDA or EMA, every CDISC validation issue must be carefully reviewed, and any remaining data problems must be documented in the Reviewer's Guide, seriously affecting programming efficiency and report integrity.
+
+The core philosophy of this tool is early intervention. Starting directly from CRF raw data, SDTM variable mapping begins during the data collection phase, with simultaneous validation against CDISC standards and FDA validation rules. Without waiting for SDTM datasets to be finalized, programmers can identify potential data quality issues early, communicate with the Data Management team for timely corrections, and reduce the likelihood of costly rework downstream.
+
+The tool maps each CRF field to its SDTM variable in layers. Data-Fit Screening first uses every collected value to rule out SDTM variables that cannot fit, and CDASH "not submitted" rules set aside fields that are never submitted. Within the remaining shortlist, several independent methods — a Custom Dictionary, text2vec semantic matching, Gemma 3 12B and 4B, and Structured Chat entity extraction — each propose an answer. When the methods agree, the answer is accepted directly; only when they disagree does Jev, a decision model that returns probabilities, arbitrate. Gemma 3 runs locally via Ollama, so CRF data never leaves the network; Jev receives metadata only. The final mapping then drives checks against CDISC conformance rules and Pinnacle 21 validation rules.
+
+On a mock study covering 5 domains (DM, AE, EX, CM, VS), mapping accuracy reached 84% on 57 scored fields, and 2,015 data issues were found before SDTM was built, including all 5 planted high-risk errors. A Human-in-the-loop design ensures mapping quality, with confirmed results accumulating in a Custom Dictionary that improves across studies. Results are delivered as an interactive Quarto HTML report, ready to share with DM, Programmers, and PMs.
+
+Built entirely on Open Source tools, helping teams find the right problems at the right time.
+
+[📄 Download Slides (PDF)](slides/RPharma2026_APAC_Lightning_Talk_Upstream_Detection_of_CDISC_Compliance_Issues.pdf)
+
+---
+
 ### 🔹 useR! 2026 (Poster)
 
 [![](slides/thumb_useR2026_poster.png){width=300px}](slides/useR2026_Poster_Patient_Timeline_Visualization.pdf)
@@ -42,29 +65,6 @@ Every Quarto report produced by this workflow is a decision snapshot: YAML param
 The workflow will be demonstrated using simulated CRF data, with discussion of practical design trade-offs in programmer-reviewer collaboration settings.
 
 [📄 Download Slides (PDF)](slides/useR2026_Lightning_Talk_Reproducible_Clinical_Data_Review.pdf)
-
----
-
-### 🔹 R/Pharma 2026 APAC (Lightning Talk)
-
-[![](slides/thumb_rpharma2026_apac.png){width=300px}](slides/RPharma2026_APAC_Lightning_Talk_Upstream_Detection_of_CDISC_Compliance_Issues.pdf)
-
-**Title:** Upstream Detection of CDISC Compliance Issues: Raw Data Quality Review with Local LLM and R  
-📍 *Status:* 2026-10-20 — Virtual  
-📝 *Summary:*  
-Detecting raw data issues as early as possible, before raw data quality impacts workflows, data analysis, or submission timelines — is the core challenge this tool aims to solve.
-
-In clinical trial data management, one of the most common frustrations for programmers is discovering data quality issues only after SDTM datasets are completed. This leads to repeated program revisions and rework. When a study requires regulatory submission to agencies such as the FDA or EMA, every CDISC validation issue must be carefully reviewed, and any remaining data problems must be documented in the Reviewer's Guide, seriously affecting programming efficiency and report integrity.
-
-The core philosophy of this tool is early intervention. Starting directly from CRF raw data, SDTM variable mapping begins during the data collection phase, with simultaneous validation against CDISC standards and FDA validation rules. Without waiting for SDTM datasets to be finalized, programmers can identify potential data quality issues early, communicate with the Data Management team for timely corrections, and reduce the likelihood of costly rework downstream.
-
-The tool maps each CRF field to its SDTM variable in layers. Data-Fit Screening first uses every collected value to rule out SDTM variables that cannot fit, and CDASH "not submitted" rules set aside fields that are never submitted. Within the remaining shortlist, several independent methods — a Custom Dictionary, text2vec semantic matching, Gemma 3 12B and 4B, and Structured Chat entity extraction — each propose an answer. When the methods agree, the answer is accepted directly; only when they disagree does Jev, a decision model that returns probabilities, arbitrate. Gemma 3 runs locally via Ollama, so CRF data never leaves the network; Jev receives metadata only. The final mapping then drives checks against CDISC conformance rules and Pinnacle 21 validation rules.
-
-On a mock study covering 5 domains (DM, AE, EX, CM, VS), mapping accuracy reached 84% on 57 scored fields, and 2,015 data issues were found before SDTM was built, including all 5 planted high-risk errors. A Human-in-the-loop design ensures mapping quality, with confirmed results accumulating in a Custom Dictionary that improves across studies. Results are delivered as an interactive Quarto HTML report, ready to share with DM, Programmers, and PMs.
-
-Built entirely on Open Source tools, helping teams find the right problems at the right time.
-
-[📄 Download Slides (PDF)](slides/RPharma2026_APAC_Lightning_Talk_Upstream_Detection_of_CDISC_Compliance_Issues.pdf)
 
 ---
 
