@@ -68,6 +68,8 @@ Clinical Research Organization | Pharmaceutical Company | Statistical Programmin
 
 - Delivered two presentations at useR! 2026 in Warsaw: a Lightning Talk, "Reproducible Clinical Data Review: A Modular R and Quarto Workflow for Transparent Reporting," and a Poster, "Patient Timeline Visualization: Presenting Individual and Population-Level Clinical Trial Journeys with R and D3.js."
 
+- Presented at R/Pharma 2026 APAC on applying local LLMs in clinical trials, combining LLMs with CDISC rules and human review to detect compliance issues in raw CRF data before SDTM is built.
+
 - Promoted at three consecutive companies (PAREXEL, Athenex, Junshi), advancing from Programmer to Statistical Programming Manager.
 
 ## Therapeutic Area
