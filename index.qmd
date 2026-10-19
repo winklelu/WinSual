@@ -76,9 +76,7 @@ Oncology, Cardiovascular, Immunology, Dermatology, Endocrinology, Nephrology, an
 
 ## Publications
 
-- Winkle Lu, Upstream Detection of CDISC-Compliant Issues: Raw Data Quality Review with Local LLM and R, R/Pharma 2026 APAC (accepted, forthcoming).
-
-- Yuqi He, Winkle Lu, Interactive QTL/KRI Risk Monitoring with Python, R/Pharma 2026 APAC (accepted, forthcoming).
+- Winkle Lu, Upstream Detection of CDISC Compliance Issues: Raw Data Quality Review with Local LLM and R, R/Pharma 2026 APAC.
 
 - Winkle Lu, Reproducible Clinical Data Review: A Modular R and Quarto Workflow for Transparent Reporting (Lightning Talk), useR! 2026.
 

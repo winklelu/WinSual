@@ -358,4 +358,5 @@ My biggest takeaway: **LLM output is a suggestion, not an answer.** First rule o
 - Pinnacle 21 validation rules (FDA Business Rules)
 - Yang E, Katz L, Shenoy S (2024). Automated mapping of electronic data capture fields to SDTM. *PLoS ONE* 19(11): e0312721. <https://doi.org/10.1371/journal.pone.0312721> (eCRF → SDTM mapping with a Siamese network + kNN; Top-5 90.4%, but it needs large amounts of labeled data and can't explain its decisions)
 - Thanks to Professor Michał Ramsza (SGH Warsaw School of Economics) for two method suggestions: filtering candidates with actual values, and Structured Chat entity extraction
+- Thanks to CDISC expert Anthony Chow for suggestions on CDISC references for this topic and on using the Jev method
 - Previous post: [Running Local LLM in Clinical Trial Workflows: From Setup to Real-World Experience](14-APR-2026-Local-LLM-Clinical-Trial-Workflow.qmd) (2026-04-14)

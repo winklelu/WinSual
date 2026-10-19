@@ -186,14 +186,19 @@ During clinical trials, EDC data must be reviewed regularly — from routine med
 <p><a href="slides/useR2026_Lightning_Talk_Reproducible_Clinical_Data_Review.pdf">📄 Download Slides (PDF)</a></p>
 <hr>
 </section>
-<section id="rpharma-2026-apac" class="level3">
-<h3 class="anchored" data-anchor-id="rpharma-2026-apac">🔹 R/Pharma 2026 APAC</h3>
-<p><strong>Title:</strong> Interactive QTL/KRI Risk Monitoring with Python <em>Co-authored with Yuqi He</em> 📍 <em>Status:</em> Accepted, forthcoming</p>
-<hr>
-</section>
-<section id="rpharma-2026-apac-1" class="level3">
-<h3 class="anchored" data-anchor-id="rpharma-2026-apac-1">🔹 R/Pharma 2026 APAC</h3>
-<p><strong>Title:</strong> Upstream Detection of CDISC-Compliant Issues: Raw Data Quality Review with Local LLM and R 📍 <em>Status:</em> Accepted, forthcoming</p>
+<section id="rpharma-2026-apac-lightning-talk" class="level3">
+<h3 class="anchored" data-anchor-id="rpharma-2026-apac-lightning-talk">🔹 R/Pharma 2026 APAC (Lightning Talk)</h3>
+<p><a href="slides/RPharma2026_APAC_Lightning_Talk_Upstream_Detection_of_CDISC_Compliance_Issues.pdf"><img src="slides/thumb_rpharma2026_apac.png" class="img-fluid" width="300"></a></p>
+<p><strong>Title:</strong> Upstream Detection of CDISC Compliance Issues: Raw Data Quality Review with Local LLM and R<br>
+📍 <em>Status:</em> 2026-10-20 — Virtual<br>
+📝 <em>Summary:</em><br>
+Detecting raw data issues as early as possible, before raw data quality impacts workflows, data analysis, or submission timelines — is the core challenge this tool aims to solve.</p>
+<p>In clinical trial data management, one of the most common frustrations for programmers is discovering data quality issues only after SDTM datasets are completed. This leads to repeated program revisions and rework. When a study requires regulatory submission to agencies such as the FDA or EMA, every CDISC validation issue must be carefully reviewed, and any remaining data problems must be documented in the Reviewer’s Guide, seriously affecting programming efficiency and report integrity.</p>
+<p>The core philosophy of this tool is early intervention. Starting directly from CRF raw data, SDTM variable mapping begins during the data collection phase, with simultaneous validation against CDISC standards and FDA validation rules. Without waiting for SDTM datasets to be finalized, programmers can identify potential data quality issues early, communicate with the Data Management team for timely corrections, and reduce the likelihood of costly rework downstream.</p>
+<p>The tool maps each CRF field to its SDTM variable in layers. Data-Fit Screening first uses every collected value to rule out SDTM variables that cannot fit, and CDASH “not submitted” rules set aside fields that are never submitted. Within the remaining shortlist, several independent methods — a Custom Dictionary, text2vec semantic matching, Gemma 3 12B and 4B, and Structured Chat entity extraction — each propose an answer. When the methods agree, the answer is accepted directly; only when they disagree does Jev, a decision model that returns probabilities, arbitrate. Gemma 3 runs locally via Ollama, so CRF data never leaves the network; Jev receives metadata only. The final mapping then drives checks against CDISC conformance rules and Pinnacle 21 validation rules.</p>
+<p>On a mock study covering 5 domains (DM, AE, EX, CM, VS), mapping accuracy reached 84% on 57 scored fields, and 2,015 data issues were found before SDTM was built, including all 5 planted high-risk errors. A Human-in-the-loop design ensures mapping quality, with confirmed results accumulating in a Custom Dictionary that improves across studies. Results are delivered as an interactive Quarto HTML report, ready to share with DM, Programmers, and PMs.</p>
+<p>Built entirely on Open Source tools, helping teams find the right problems at the right time.</p>
+<p><a href="slides/RPharma2026_APAC_Lightning_Talk_Upstream_Detection_of_CDISC_Compliance_Issues.pdf">📄 Download Slides (PDF)</a></p>
 <hr>
 </section>
 <section id="shinyconf-2025" class="level3">
