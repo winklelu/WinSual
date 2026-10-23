@@ -1,6 +1,6 @@
 # _post-render.R
 # 每次 quarto render 後自動執行
-# 從根目錄複製 winviz.html、tools/、files/ 到 docs/
+# 從根目錄複製 winviz.html、my-journey.html、tools/、files/ 到 docs/
 
 # --- 1. winviz.html ---
 if (file.exists("winviz.html")) {
@@ -8,6 +8,14 @@ if (file.exists("winviz.html")) {
   cat("✅ docs/winviz.html restored from root\n")
 } else {
   cat("⚠️  winviz.html not found in root directory\n")
+}
+
+# --- 1b. my-journey.html ---
+if (file.exists("my-journey.html")) {
+  file.copy("my-journey.html", "docs/my-journey.html", overwrite = TRUE)
+  cat("✅ docs/my-journey.html restored from root\n")
+} else {
+  cat("⚠️  my-journey.html not found in root directory\n")
 }
 
 # --- 2. tools/ ---

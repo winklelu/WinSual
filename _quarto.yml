@@ -36,6 +36,8 @@ website:
         text: Blog
       - href: winviz.html
         text: WinViz Lab
+      - href: my-journey.html
+        text: My Journey
 
 format:
   html:
